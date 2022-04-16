@@ -1,0 +1,40 @@
+import requests
+import tkinter as tk
+import pyttsx3
+
+engine = pyttsx3.init()
+
+def getNews():
+    api_key = "fb4edee29fda4ee285a5e2e35cbeb917"
+    url = "https://newsapi.org/v2/top-headlines?country=in&apiKey="+api_key
+    news = requests.get(url).json()
+
+    articles = news["articles"]
+
+    my_articles = []
+    my_news = ""
+
+    for article in articles:
+        my_articles.append(article["title"])
+
+    for i in range(10):
+        my_news = my_news + str(i+1) + ". " + my_articles[i] + "\n"
+
+    label.config(text = my_news)
+
+    # engine.say(my_news)  #  uncomment this to listen to the news
+    # engine.runAndWait()  #  uncomment this to listen to the news
+
+canvas = tk.Tk()
+canvas.geometry("900x600")
+canvas.title("newsApp")
+
+button = tk.Button(canvas, font=24, text="reload", command=getNews)
+button.pack(pady=20)
+
+label = tk.Label(canvas, font=18, justify="left")
+label.pack(pady=20)
+
+getNews()
+
+canvas.mainloop()
